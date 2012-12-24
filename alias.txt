@@ -1,0 +1,56 @@
+[alias]
+    c    = config -l
+    s    = status -sb
+    l    = log --pretty=oneline --abbrev-commit --abbrev=4 -25
+    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
+    rp   = rev-parse --short=4
+    b    = branch
+
+
+# Example:
+#
+#    git save "This is my very important commit..."
+#
+    save = !git add -A && git commit -m "\"$@\"" && shift 1 && echo Saved!
+
+
+# Example:
+#
+#    git backup "This is my very important commit..."
+#
+    backup = !git add -A && git commit -m "\"$@\"" && shift 1 && git push && echo Saved and stored on server!
+
+
+# Example:
+#
+#    git simple-commit a
+#
+    simple-commit = !echo $1>$1.txt && git add -A && git commit -m "\"$1\"" && shift 1 && echo Simple commit done!
+
+
+# Example:
+#
+#    git simple-commits lorem ipsum dolor
+#
+    simple-commits = "!simpleCommits() { for name in \"$@\"; do git simple-commit $name; done; }; simpleCommits"
+
+
+# Example:
+#
+#    git simple-loop lorem 5
+#
+    simple-loop = "!simpleLoop() { NAME=$1; i="1"; while [ $i -le $2 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop"
+
+
+# Example:
+#
+#    git simple-loop2 lorem 7 13
+#
+    simple-loop2 = "!simpleLoop2() { NAME=$1; i=$2; while [ $i -le $3 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop2"
+
+
+# Example:
+#
+#    git branches lorem ipsum dolor
+#
+    branches = "!branches() { for name in \"$@\"; do git branch $name; done; }; branches"
