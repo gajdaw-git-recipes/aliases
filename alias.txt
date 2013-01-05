@@ -9,30 +9,34 @@
 
 # Example:
 #
+#    git save This is my very important commit...
 #    git save "This is my very important commit..."
 #
-    save = !git add -A && git commit -m "\"$@\"" && shift 1 && echo Saved!
+    save = "!save() { git add -A; git commit -m "\"$*\""; }; save"
 
 
 # Example:
 #
+#    git backup This is my very important commit...
 #    git backup "This is my very important commit..."
 #
-    backup = !git add -A && git commit -m "\"$@\"" && shift 1 && git push && echo Saved and stored on server!
+    backup = "!backup() { git save "\"$*\""; git push; }; backup"
+
+
+# Example:
+#
+#    git create-file lorem
+#    git create-file lorem ipsum dolor
+#
+    create-file = "!createFile() { for name in \"$@\"; do echo $name>$name.txt; done; }; createFile"
 
 
 # Example:
 #
 #    git simple-commit a
+#    git simple-commit a b c
 #
-    simple-commit = !echo $1>$1.txt && git add -A && git commit -m "\"$1\"" && shift 1 && echo Simple commit done!
-
-
-# Example:
-#
-#    git simple-commits lorem ipsum dolor
-#
-    simple-commits = "!simpleCommits() { for name in \"$@\"; do git simple-commit $name; done; }; simpleCommits"
+    simple-commit = "!simpleCommit() { for name in \"$@\"; do git create-file $name; git save $name; done; }; simpleCommit"
 
 
 # Example:
