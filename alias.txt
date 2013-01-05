@@ -7,6 +7,21 @@
     b    = branch
 
 
+# General purpose aliases:
+#     save
+#     backup
+#
+# Educational aliases:
+#    create-file
+#    simple-commit
+#    multiple-commit
+#    simple-loop
+#    simple-loop2
+#    clear
+#    branches
+
+
+# Alias: save
 # Example:
 #
 #    git save This is my very important commit...
@@ -15,6 +30,7 @@
     save = "!save() { git add -A; git commit -m "\"$*\""; }; save"
 
 
+# Alias: backup
 # Example:
 #
 #    git backup This is my very important commit...
@@ -23,6 +39,7 @@
     backup = "!backup() { git save "\"$*\""; git push; }; backup"
 
 
+# Alias: create-file
 # Example:
 #
 #    git create-file lorem
@@ -31,6 +48,7 @@
     create-file = "!createFile() { for name in \"$@\"; do echo $name>$name.txt; done; }; createFile"
 
 
+# Alias: simple-commit
 # Example:
 #
 #    git simple-commit a
@@ -39,6 +57,7 @@
     simple-commit = "!simpleCommit() { for name in \"$@\"; do git create-file $name; git save $name; done; }; simpleCommit"
 
 
+# Alias: multiple-commit
 # Example:
 #
 #    git multi-commit lorem
@@ -47,6 +66,7 @@
     multi-commit = "!multiCommit() { for name in \"$@\"; do git create-file $name; done; git save \"$*\"; }; multiCommit"
 
 
+# Alias: simple-loop
 # Example:
 #
 #    git simple-loop lorem 5
@@ -54,6 +74,7 @@
     simple-loop = "!simpleLoop() { NAME=$1; i="1"; while [ $i -le $2 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop"
 
 
+# Alias: simple-loop2
 # Example:
 #
 #    git simple-loop2 lorem 7 13
@@ -61,6 +82,7 @@
     simple-loop2 = "!simpleLoop2() { NAME=$1; i=$2; while [ $i -le $3 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop2"
 
 
+# Alias: clear
 # Example:
 #
 #    git clear
@@ -68,6 +90,7 @@
     clear = "!clear() { rm *.txt; git save "Cleared!"; }; clear"
 
 
+# Alias: branches
 # Example:
 #
 #    git branches lorem ipsum dolor
