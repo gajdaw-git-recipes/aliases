@@ -41,6 +41,14 @@
 
 # Example:
 #
+#    git multi-commit lorem
+#    git multi-commit lorem ipsum dolor
+#
+    multi-commit = "!multiCommit() { for name in \"$@\"; do git create-file $name; done; git save \"$*\"; }; multiCommit"
+
+
+# Example:
+#
 #    git simple-loop lorem 5
 #
     simple-loop = "!simpleLoop() { NAME=$1; i="1"; while [ $i -le $2 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop"
@@ -51,6 +59,13 @@
 #    git simple-loop2 lorem 7 13
 #
     simple-loop2 = "!simpleLoop2() { NAME=$1; i=$2; while [ $i -le $3 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop2"
+
+
+# Example:
+#
+#    git clear
+#
+    clear = "!clear() { rm *.txt; git save "Cleared!"; }; clear"
 
 
 # Example:
