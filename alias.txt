@@ -39,6 +39,16 @@
     backup = "!backup() { git save "\"$*\""; git push; }; backup"
 
 
+# Alias: stat
+# Example:
+#
+#    git stat
+#
+# Problem z find
+#
+    stat = "!stat() { du -h -s --exclude=.git; du -h -s; git shortlog -s -n | wc -l; git log --oneline | wc -l; }; stat"
+
+
 # Alias: create-file
 # Example:
 #
