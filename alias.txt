@@ -8,7 +8,7 @@
 
 
 # General purpose aliases:
-#     save
+#     snapshot
 #     backup
 #
 # Educational aliases:
@@ -21,13 +21,13 @@
 #    branches
 
 
-# Alias: save
+# Alias: snapshot
 # Example:
 #
-#    git save This is my very important commit...
-#    git save "This is my very important commit..."
+#    git snapshot This is my very important commit...
+#    git snapshot "This is my very important commit..."
 #
-    save = "!save() { git add -A; git commit -m "\"$*\""; }; save"
+    snapshot = "!snapshot() { git add -A; git commit -m "\"$*\""; }; snapshot"
 
 
 # Alias: backup
