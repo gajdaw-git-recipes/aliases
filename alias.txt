@@ -1,3 +1,7 @@
+
+# ===[ALIAS-START]===
+#
+
 [alias]
     c    = config -l
     s    = status -sb
@@ -36,7 +40,7 @@
 #    git backup This is my very important commit...
 #    git backup "This is my very important commit..."
 #
-    backup = "!backup() { git save "\"$*\""; git push; }; backup"
+    backup = "!backup() { git snapshot "\"$*\""; git push; }; backup"
 
 
 # Alias: stat
@@ -106,3 +110,7 @@
 #    git branches lorem ipsum dolor
 #
     branches = "!branches() { for name in \"$@\"; do git branch $name; done; }; branches"
+
+
+#
+# ===[ALIAS-STOP]===
