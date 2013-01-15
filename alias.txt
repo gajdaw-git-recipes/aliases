@@ -68,7 +68,7 @@
 #    git simple-commit a
 #    git simple-commit a b c
 #
-    simple-commit = "!simpleCommit() { for name in \"$@\"; do git create-file $name; git save $name; done; }; simpleCommit"
+    simple-commit = "!simpleCommit() { for name in \"$@\"; do git create-file $name; git snapshot $name; done; }; simpleCommit"
 
 
 # Alias: multiple-commit
@@ -77,7 +77,7 @@
 #    git multi-commit lorem
 #    git multi-commit lorem ipsum dolor
 #
-    multi-commit = "!multiCommit() { for name in \"$@\"; do git create-file $name; done; git save \"$*\"; }; multiCommit"
+    multi-commit = "!multiCommit() { for name in \"$@\"; do git create-file $name; done; git snapshot \"$*\"; }; multiCommit"
 
 
 # Alias: simple-loop
@@ -101,7 +101,7 @@
 #
 #    git clear
 #
-    clear = "!clear() { rm *.txt; git save "Cleared!"; }; clear"
+    clear = "!clear() { rm *.txt; git snapshot "Cleared!"; }; clear"
 
 
 # Alias: branches
