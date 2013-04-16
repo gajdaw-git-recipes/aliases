@@ -14,6 +14,8 @@
 # General purpose aliases:
 #     snapshot
 #     backup
+#     stat
+#     days
 #
 # Educational aliases:
 #    create-file
@@ -50,7 +52,15 @@
 #
 # Problem z find
 #
-    stat = "!stat() { du -h -s --exclude=.git; du -h -s; git shortlog -s -n | wc -l; git log --oneline | wc -l; }; stat"
+    stat = "!stat() { echo -n "Disk usage without .git: "; du -h -s --exclude=.git; echo -n "Disk usage: "; du -h -s; echo -n "Commiters: "; git shortlog -s -n | wc -l; echo -n "Commits"; git log --oneline | wc -l; }; stat"
+
+
+# Alias: days
+# Example:
+#
+#    git days
+#
+    days = "!days() { git log --pretty=format:"%cd" --date=short | uniq; }; days"
 
 
 # Alias: create-file
