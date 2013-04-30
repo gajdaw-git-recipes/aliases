@@ -52,7 +52,7 @@
 #
 # Problem z find
 #
-    stat = "!stat() { echo -n "Disk usage without .git: "; du -h -s --exclude=.git; echo -n "Disk usage: "; du -h -s; echo -n "Commiters: "; git shortlog -s -n | wc -l; echo -n "Commits"; git log --oneline | wc -l; }; stat"
+    stat = "!stat() { echo -n "The working directory:"; du -h -s --exclude=.git; echo -n "The git directory:"; du -h -s .git; echo -n "Commiters:"; git shortlog -s -n | wc -l; echo -n "Commits:"; git log --oneline | wc -l; }; stat"
 
 
 # Alias: days
