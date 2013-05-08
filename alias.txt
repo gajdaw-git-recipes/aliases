@@ -3,6 +3,16 @@
 #
 
 [alias]
+
+# Tests: how to pass many parameters as one parameter to subcommand?
+#
+#     git test2 lorem ipsum dolor sit amet
+#
+    test  = "!test() { git test2 \"$*\"; }; test"
+    test2 = "!echo $#"
+
+
+
     c    = config -l
     s    = status -s
     sb   = status -sb
