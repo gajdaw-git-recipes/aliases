@@ -13,6 +13,7 @@
 
 
 
+
     c    = config -l
     s    = status -s
     sb   = status -sb
