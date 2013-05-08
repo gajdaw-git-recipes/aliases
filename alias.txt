@@ -9,7 +9,7 @@
 #     git tmp lorem ipsum dolor sit amet
 #
     tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
-    tmp2 = "!echo $#"
+    tmp2 = "!tmp2(){ echo $#; echo -n "["; echo -n $*; echo "]"; }; tmp2"
 
 
 
