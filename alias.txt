@@ -6,10 +6,10 @@
 
 # Tests: how to pass many parameters as one parameter to subcommand?
 #
-#     git test2 lorem ipsum dolor sit amet
+#     git tmp lorem ipsum dolor sit amet
 #
-    test  = "!test() { git test2 \"$*\"; }; test"
-    test2 = "!echo $#"
+    tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
+    tmp2 = "!echo $#"
 
 
 
