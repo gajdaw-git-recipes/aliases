@@ -4,7 +4,8 @@
 
 [alias]
     c    = config -l
-    s    = status -sb
+    s    = status -s
+    sb   = status -sb
     l    = log --pretty=oneline --abbrev-commit --abbrev=4 -25
     g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
     rp   = rev-parse --short=4
@@ -33,7 +34,7 @@
 #    git snapshot This is my very important commit...
 #    git snapshot "This is my very important commit..."
 #
-    snapshot = "!snapshot() { git add -A; git commit -m "\"$*\""; }; snapshot"
+    snapshot = "!snapshot() { git add -A; git commit -m \"$*\"; }; snapshot"
 
 
 # Alias: backup
@@ -42,7 +43,7 @@
 #    git backup This is my very important commit...
 #    git backup "This is my very important commit..."
 #
-    backup = "!backup() { git snapshot "\"$*\""; git push; }; backup"
+    backup = "!backup() { git snapshot \"$*\"; git push; }; backup"
 
 
 # Alias: stat
