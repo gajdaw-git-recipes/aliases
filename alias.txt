@@ -11,6 +11,11 @@
     tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
     tmp2 = "!tmp2(){ echo $#; echo -n "["; echo -n $*; echo "]"; }; tmp2"
 
+#    tmp3 = "!tmp3(){ COMMENT=wip; if [ "$*" ]; then ; COMMENT=\"$*\"; fi; echo $COMMENT; }; tmp3"
+#    tmp3 = "!tmp3(){ if [ \"aaa\" ] ; then  echo aaa ; fi ; } ; tmp3"
+    tmp3 = "!tmp3(){ COMMENT=wip; if [ \"$*\" ] ; then  COMMENT=\"$*\"; fi; echo $COMMENT; } ; tmp3"
+
+
 
 
 
@@ -21,6 +26,7 @@
     g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
     rp   = rev-parse --short=4
     b    = branch
+    ss   = !git snapshot
 
 
 # General purpose aliases:
@@ -44,8 +50,9 @@
 #
 #    git snapshot This is my very important commit...
 #    git snapshot "This is my very important commit..."
+#    git snapshot
 #
-    snapshot = "!snapshot() { git add -A; git commit -m \"$*\"; }; snapshot"
+    snapshot = "!snapshot() { COMMENT=wip; if [ \"$*\" ]; then  COMMENT=\"$*\"; fi; git add -A; git commit -m \"$COMMENT\"; }; snapshot"
 
 
 # Alias: backup
@@ -64,7 +71,7 @@
 #
 # Problem z find
 #
-    stat = "!stat() { echo -n "The working directory:"; du -h -s --exclude=.git; echo -n "The git directory:"; du -h -s .git; echo -n "Commiters:"; git shortlog -s -n | wc -l; echo -n "Commits:"; git log --oneline | wc -l; }; stat"
+    stat = "!stat() { echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Commiters:; git shortlog -s -n | wc -l; echo -n Commits:; git log --oneline | wc -l; }; stat"
 
 
 # Alias: days
@@ -72,7 +79,7 @@
 #
 #    git days
 #
-    days = "!days() { git log --pretty=format:"%cd" --date=short | uniq; }; days"
+    days = "!days() { git log --pretty=format:%cd --date=short | uniq; }; days"
 
 
 # Alias: create-file
