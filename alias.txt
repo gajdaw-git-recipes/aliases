@@ -8,13 +8,14 @@
 #
 #     git tmp lorem ipsum dolor sit amet
 #
-    tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
-    tmp2 = "!tmp2(){ echo $#; echo -n "["; echo -n $*; echo "]"; }; tmp2"
-
+#    tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
+#    tmp2 = "!tmp2(){ echo $#; echo -n "["; echo -n $*; echo "]"; }; tmp2"
 #    tmp3 = "!tmp3(){ COMMENT=wip; if [ "$*" ]; then ; COMMENT=\"$*\"; fi; echo $COMMENT; }; tmp3"
 #    tmp3 = "!tmp3(){ if [ \"aaa\" ] ; then  echo aaa ; fi ; } ; tmp3"
-    tmp3 = "!tmp3(){ COMMENT=wip; if [ \"$*\" ] ; then  COMMENT=\"$*\"; fi; echo $COMMENT; } ; tmp3"
-
+#    tmp3 = "!tmp3(){ COMMENT=wip; if [ \"$*\" ] ; then  COMMENT=\"$*\"; fi; echo $COMMENT; } ; tmp3"
+#    tmp4 = "!tmp4(){ find . -type f | grep -v -E '\\./\\.git/'  ; }; tmp4"
+#abc(){ find . -type f | grep -v -E './.git/'; }; abc
+#
 
 
 
@@ -64,22 +65,30 @@
     backup = "!backup() { git snapshot \"$*\"; git push; }; backup"
 
 
-# Alias: stat
-# Example:
-#
-#    git stat
-#
-# Problem z find
-#
-    stat = "!stat() { echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Commiters:; git shortlog -s -n | wc -l; echo -n Commits:; git log --oneline | wc -l; }; stat"
-
-
 # Alias: days
 # Example:
 #
 #    git days
 #
     days = "!days() { git log --pretty=format:%cd --date=short | uniq; }; days"
+
+
+# Alias: working-dir-files
+# Example:
+#
+#    git working-dir-files
+#
+    working-dir-files = "!workingDirFiles(){ find . -type f | grep -v -E '^\\./\\.git/'  ; }; workingDirFiles"
+
+
+# Alias: stat
+# Example:
+#
+#    git stat
+#
+    stat = "!stat() { echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Commiters:; git shortlog -s -n | wc -l; echo -n Commits:; git log --oneline | wc -l; echo -n Working dir files:; git working-dir-files | wc -l; echo -n Number of days:; git days | wc -l; }; stat"
+
+
 
 
 # Alias: create-file
