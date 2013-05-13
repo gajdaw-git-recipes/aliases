@@ -86,9 +86,7 @@
 #
 #    git stat
 #
-    stat = "!stat() { echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Commiters:; git shortlog -s -n | wc -l; echo -n Commits:; git log --oneline | wc -l; echo -n Working dir files:; git working-dir-files | wc -l; echo -n Number of days:; git days | wc -l; }; stat"
-
-
+    stat = "!stat() { echo -n Number of revisions:; git log --oneline | wc -l; echo -n Number of developers:; git shortlog -s | wc -l; echo -n Number of days:; git days | wc -l; echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Number of files in the working dir:; git working-dir-files | wc -l; }; stat"
 
 
 # Alias: create-file
