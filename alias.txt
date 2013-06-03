@@ -4,27 +4,12 @@
 
 [alias]
 
-# Tests: how to pass many parameters as one parameter to subcommand?
-#
-#     git tmp lorem ipsum dolor sit amet
-#
-#    tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
-#    tmp2 = "!tmp2(){ echo $#; echo -n "["; echo -n $*; echo "]"; }; tmp2"
-#    tmp3 = "!tmp3(){ COMMENT=wip; if [ "$*" ]; then ; COMMENT=\"$*\"; fi; echo $COMMENT; }; tmp3"
-#    tmp3 = "!tmp3(){ if [ \"aaa\" ] ; then  echo aaa ; fi ; } ; tmp3"
-#    tmp3 = "!tmp3(){ COMMENT=wip; if [ \"$*\" ] ; then  COMMENT=\"$*\"; fi; echo $COMMENT; } ; tmp3"
-#    tmp4 = "!tmp4(){ find . -type f | grep -v -E '\\./\\.git/'  ; }; tmp4"
-#abc(){ find . -type f | grep -v -E './.git/'; }; abc
-#
-
-
-
-
     c    = config -l
-    s    = status -s
+    s    = status -sb
     sb   = status -sb
     l    = log --pretty=oneline --abbrev-commit --abbrev=4 -25
-    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
+    ll   = log --pretty=oneline --abbrev-commit --abbrev=4
+    gg   = log --pretty=oneline --abbrev-commit --abbrev=4 --graph
     rp   = rev-parse --short=4
     b    = branch
     ss   = !git snapshot
@@ -78,7 +63,8 @@
 #
 #    git working-dir-files
 #
-    working-dir-files = "!workingDirFiles(){ find . -type f | grep -v -E '^\\./\\.git/'  ; }; workingDirFiles"
+#    working-dir-files = "!workingDirFiles(){ find . -type f | grep -v -E '^\\./\\.git/'  ; }; workingDirFiles"
+    working-dir-files = "!workingDirFiles(){ git ls-files ; }; workingDirFiles"
 
 
 # Alias: stat
@@ -130,14 +116,6 @@
 #    git simple-loop2 lorem 7 13
 #
     simple-loop2 = "!simpleLoop2() { NAME=$1; i=$2; while [ $i -le $3 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop2"
-
-
-# Alias: clear
-# Example:
-#
-#    git clear
-#
-    clear = "!clear() { rm *.txt; git snapshot "Cleared!"; }; clear"
 
 
 # Alias: branches
