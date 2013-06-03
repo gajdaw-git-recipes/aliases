@@ -1,9 +1,7 @@
-
 # ===[ALIAS-START]===
 #
 
 [alias]
-
     c    = config -l
     s    = status -sb
     sb   = status -sb
@@ -14,6 +12,7 @@
     rp   = rev-parse --short=4
     b    = branch
     ss   = !git snapshot
+    save = !git snapshot
 
 
 # General purpose aliases:
@@ -40,7 +39,6 @@
 #    git snapshot
 #
     snapshot = "!snapshot() { COMMENT=wip; if [ \"$*\" ]; then  COMMENT=\"$*\"; fi; git add -A; git commit -m \"$COMMENT\"; }; snapshot"
-    save = "!save() { COMMENT=wip; if [ \"$*\" ]; then  COMMENT=\"$*\"; fi; git add -A; git commit -m \"$COMMENT\"; }; save"
 
 
 # Alias: backup
