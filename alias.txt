@@ -59,21 +59,12 @@
     days = "!days() { git log --pretty=format:%cd --date=short | uniq; }; days"
 
 
-# Alias: working-dir-files
-# Example:
-#
-#    git working-dir-files
-#
-#    working-dir-files = "!workingDirFiles(){ find . -type f | grep -v -E '^\\./\\.git/'  ; }; workingDirFiles"
-    working-dir-files = "!workingDirFiles(){ git ls-files ; }; workingDirFiles"
-
-
 # Alias: stat
 # Example:
 #
 #    git stat
 #
-    stat = "!stat() { echo -n Number of revisions:; git log --oneline | wc -l; echo -n Number of developers:; git shortlog -s | wc -l; echo -n Number of days:; git days | wc -l; echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Number of files in the working dir:; git working-dir-files | wc -l; }; stat"
+    stat = "!stat() { echo -n Number of revisions:; git log --oneline | wc -l; echo -n Number of developers:; git shortlog -s | wc -l; echo -n Number of days:; git days | wc -l; echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Number of files in the working dir:; git ls-files | wc -l; }; stat"
 
 
 # Alias: create-file
