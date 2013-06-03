@@ -9,6 +9,7 @@
     sb   = status -sb
     l    = log --pretty=oneline --abbrev-commit --abbrev=4 -25
     ll   = log --pretty=oneline --abbrev-commit --abbrev=4
+    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
     gg   = log --pretty=oneline --abbrev-commit --abbrev=4 --graph
     rp   = rev-parse --short=4
     b    = branch
