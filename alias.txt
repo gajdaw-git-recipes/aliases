@@ -117,5 +117,27 @@
     branches = "!branches() { for name in \"$@\"; do git branch $name; done; }; branches"
 
 
+
+# Clonning with remote branches
+#
+# Command to list remote branches:
+#
+#    git branch -r | sed "/->/d; s/  origin\///g"
+#
+    list-remote-branches = "!listRemoteBranches() { git branch -r | sed \"/->/d; s/  origin\\///g\"; }; listRemoteBranches"
+    checkout-remote-branches = "!checkoutRemoteBranches() { for name in `git list-remote-branches`; do git checkout $name; done; }; checkoutRemoteBranches"
+#
+# Example:
+#
+#   git clone-with-branches dirSrc dirDest
+#
+    clone-with-branches = "!cloneWithBranches() { git clone $1 $2; cd $2; git checkout-remote-branches; git remote rm origin; }; cloneWithBranches"
+
+#@todo: check parameters:
+#   git clone-with-branches URL
+
+
+
+
 #
 # ===[ALIAS-STOP]===
