@@ -5,10 +5,10 @@
     c    = config -l
     s    = status -sb
     sb   = status -sb
-    l    = log --pretty=oneline --abbrev-commit --abbrev=4 -25
-    ll   = log --pretty=oneline --abbrev-commit --abbrev=4
-    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
-    gg   = log --pretty=oneline --abbrev-commit --abbrev=4 --graph
+    l    = log --pretty=oneline --abbrev-commit --abbrev=4 --decorate -25
+    ll   = log --pretty=oneline --abbrev-commit --abbrev=4 --decorate
+    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph --decorate
+    gg   = log --pretty=oneline --abbrev-commit --abbrev=4 --graph --decorate
     rp   = rev-parse --short=4
     b    = branch
     ss   = !git snapshot
