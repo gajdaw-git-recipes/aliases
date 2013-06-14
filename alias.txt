@@ -138,6 +138,17 @@
 
 
 
+    # Example:
+    #
+    #   git checkout beta
+    #   git set-version 0.1.0
+    #
+    # assumptions:
+    #  - clean repo
+    #
+
+    set-version = "!setVersion() { echo $1 > version; git snapshot Version $1; git tag -a v$1 -m \"Release $1\";  }; setVersion"
+
 
 #
 # ===[ALIAS-STOP]===
