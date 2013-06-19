@@ -1,6 +1,7 @@
 # ===[ALIAS-START]===
 #
 
+
 [alias]
     c    = config -l
     s    = status -sb
