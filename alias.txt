@@ -147,10 +147,10 @@
     # assumptions:
     #  - clean repo
     #
-    # @todo git get-version works only in repo's root dir
+    # @git get-version === cat version.txt
 
     set-version = "!setVersion() { echo $1 > version.txt; git snapshot Version $1; git tag -a v$1 -m \"Release $1\";  }; setVersion"
-    get-version = "!getVersion() { echo version.txt; }; getVersion"
+    get-version = "!getVersion() { cat version.txt; }; getVersion"
 
 
 
@@ -164,3 +164,4 @@
 
 #
 # ===[ALIAS-STOP]===
+
