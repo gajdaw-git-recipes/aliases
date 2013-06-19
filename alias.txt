@@ -153,9 +153,10 @@
 
 # Remove old commits
 #
-#    git remove-old-commits
+#    git clear-reflog-now
 #
-    remove-old-commits = "!removeOldCommits() { git reflog expire --all --expire=now; git prune;  }; removeOldCommits"
+    clear-reflog-now = "!clearReflogNow() { git reflog expire --all --expire=now;  }; clearReflogNow"
+    remove-old-commits = "!removeOldCommits() { git clear-reflog-now; git prune;  }; removeOldCommits"
 
 
 
