@@ -150,5 +150,14 @@
     set-version = "!setVersion() { echo $1 > version; git snapshot Version $1; git tag -a v$1 -m \"Release $1\";  }; setVersion"
 
 
+
+# Remove old commits
+#
+#    git remove-old-commits
+#
+    remove-old-commits = "!removeOldCommits() { git reflog expire --all --expire=now; git prune;  }; removeOldCommits"
+
+
+
 #
 # ===[ALIAS-STOP]===
