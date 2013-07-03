@@ -5,7 +5,6 @@
 [alias]
     c    = config -l
     s    = status -sb
-    sb   = status -sb
     l    = log --pretty=oneline --abbrev-commit --abbrev=4 --decorate -25
     ll   = log --pretty=oneline --abbrev-commit --abbrev=4 --decorate
     g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph --decorate
