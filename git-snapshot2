@@ -1,0 +1,11 @@
+#!/bin/sh
+
+COMMENT=wip
+
+if [ "$*" ]; then
+    COMMENT="$*"
+fi;
+
+
+git add -A
+git commit -m "$COMMENT"
