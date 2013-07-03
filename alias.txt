@@ -1,33 +1,18 @@
-
 # ===[ALIAS-START]===
 #
 
+
 [alias]
-
-# Tests: how to pass many parameters as one parameter to subcommand?
-#
-#     git tmp lorem ipsum dolor sit amet
-#
-#    tmp  = "!tmp() { git tmp2 \"$*\"; }; tmp"
-#    tmp2 = "!tmp2(){ echo $#; echo -n "["; echo -n $*; echo "]"; }; tmp2"
-#    tmp3 = "!tmp3(){ COMMENT=wip; if [ "$*" ]; then ; COMMENT=\"$*\"; fi; echo $COMMENT; }; tmp3"
-#    tmp3 = "!tmp3(){ if [ \"aaa\" ] ; then  echo aaa ; fi ; } ; tmp3"
-#    tmp3 = "!tmp3(){ COMMENT=wip; if [ \"$*\" ] ; then  COMMENT=\"$*\"; fi; echo $COMMENT; } ; tmp3"
-#    tmp4 = "!tmp4(){ find . -type f | grep -v -E '\\./\\.git/'  ; }; tmp4"
-#abc(){ find . -type f | grep -v -E './.git/'; }; abc
-#
-
-
-
-
     c    = config -l
-    s    = status -s
-    sb   = status -sb
-    l    = log --pretty=oneline --abbrev-commit --abbrev=4 -25
-    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph
+    s    = status -sb
+    l    = log --pretty=oneline --abbrev-commit --abbrev=4 --decorate -25
+    ll   = log --pretty=oneline --abbrev-commit --abbrev=4 --decorate
+    g    = log --pretty=oneline --abbrev-commit --abbrev=4 -25 --graph --decorate
+    gg   = log --pretty=oneline --abbrev-commit --abbrev=4 --graph --decorate
     rp   = rev-parse --short=4
     b    = branch
     ss   = !git snapshot
+    save = !git snapshot
 
 
 # General purpose aliases:
@@ -73,20 +58,12 @@
     days = "!days() { git log --pretty=format:%cd --date=short | uniq; }; days"
 
 
-# Alias: working-dir-files
-# Example:
-#
-#    git working-dir-files
-#
-    working-dir-files = "!workingDirFiles(){ find . -type f | grep -v -E '^\\./\\.git/'  ; }; workingDirFiles"
-
-
 # Alias: stat
 # Example:
 #
 #    git stat
 #
-    stat = "!stat() { echo -n Number of revisions:; git log --oneline | wc -l; echo -n Number of developers:; git shortlog -s | wc -l; echo -n Number of days:; git days | wc -l; echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Number of files in the working dir:; git working-dir-files | wc -l; }; stat"
+    stat = "!stat() { echo -n Number of revisions:; git log --oneline | wc -l; echo -n Number of developers:; git shortlog -s | wc -l; echo -n Number of days:; git days | wc -l; echo -n The working directory:; du -h -s --exclude=.git; echo -n The git directory:; du -h -s .git; echo -n Number of files in the working dir:; git ls-files | wc -l; }; stat"
 
 
 # Alias: create-file
@@ -132,14 +109,6 @@
     simple-loop2 = "!simpleLoop2() { NAME=$1; i=$2; while [ $i -le $3 ]; do git simple-commit $NAME$i; i=$[$i+1]; done; }; simpleLoop2"
 
 
-# Alias: clear
-# Example:
-#
-#    git clear
-#
-    clear = "!clear() { rm *.txt; git snapshot "Cleared!"; }; clear"
-
-
 # Alias: branches
 # Example:
 #
@@ -148,5 +117,50 @@
     branches = "!branches() { for name in \"$@\"; do git branch $name; done; }; branches"
 
 
+
+# Clonning with remote branches
+#
+# Command to list remote branches:
+#
+#    git branch -r | sed "/->/d; s/  origin\///g"
+#
+    list-remote-branches = "!listRemoteBranches() { git branch -r | sed \"/->/d; s/  origin\\///g\"; }; listRemoteBranches"
+    checkout-remote-branches = "!checkoutRemoteBranches() { for name in `git list-remote-branches`; do git checkout $name; done; }; checkoutRemoteBranches"
+#
+# Example:
+#
+#   git clone-with-branches dirSrc dirDest
+#
+    clone-with-branches = "!cloneWithBranches() { git clone $1 $2; cd $2; git checkout-remote-branches; git remote rm origin; }; cloneWithBranches"
+
+#@todo: check parameters:
+#   git clone-with-branches URL
+
+
+
+    # Example:
+    #
+    #   git checkout beta
+    #   git set-version 0.1.0
+    #
+    # assumptions:
+    #  - clean repo
+    #
+    # @git get-version === cat version.txt
+
+    set-version = "!setVersion() { echo $1 > version.txt; git snapshot Version $1; git tag -a v$1 -m \"Release $1\";  }; setVersion"
+    get-version = "!getVersion() { cat version.txt; }; getVersion"
+
+
+
+# Remove old commits
+#
+#    git clear-reflog-now
+#
+    clear-reflog-now = "!clearReflogNow() { git reflog expire --all --expire=now;  }; clearReflogNow"
+    remove-old-commits = "!removeOldCommits() { git clear-reflog-now; git prune;  }; removeOldCommits"
+
+
 #
 # ===[ALIAS-STOP]===
+
