@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cloneWithBranches() {
+    git clone $1 $2;
+    cd $2;
+    git checkout-remote-branches;
+    git remote rm origin
+};
+
+cloneWithBranches
