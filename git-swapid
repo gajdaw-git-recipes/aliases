@@ -94,7 +94,7 @@ echo "ID:login    = $MYID_LOGIN"
 echo "  "
 
 # We expect all four not null global git config settings for this id
-if [ ! $MYID_NAME ]; then
+if [ ! "$MYID_NAME" ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.name"
     exit;
 fi
