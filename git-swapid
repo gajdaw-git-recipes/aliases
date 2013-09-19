@@ -70,14 +70,14 @@ else
     # set default identity if possible
     MYID=`git config --global user.login`
 
-    if [ "$MYID" == "" ]; then
+    if [ ! $MYID ]; then
         echo "***** ERROR: Global user.login not set!"
         echo "***** ERROR: git swapid called without parameters needs default identity!"
         exit
     fi;
 fi;
 
-if [ "$MYID" == "" ]; then
+if [ ! $MYID ]; then
     echo "***** ERROR: The identity cannot be a null string!"
     exit
 fi;
@@ -94,19 +94,19 @@ echo "ID:login    = $MYID_LOGIN"
 echo "  "
 
 # We expect all four not null global git config settings for this id
-if [ "$MYID_NAME" == "" ]; then
+if [ ! $MYID_NAME ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.name"
     exit;
 fi
-if [ "$MYID_EMAIL" == "" ]; then
+if [ ! $MYID_EMAIL ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.email"
     exit;
 fi
-if [ "$MYID_KEY" == "" ]; then
+if [ ! $MYID_KEY ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.key"
     exit;
 fi
-if [ "$MYID_LOGIN" == "" ]; then
+if [ ! $MYID_LOGIN ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.login"
     exit;
 fi
