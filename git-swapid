@@ -1,0 +1,168 @@
+#!/bin/sh
+#
+# Script to swap git/ssh identities.
+# It affects two files:
+#    ~/.gitconfig
+#    ~/.ssh/config
+#
+# You need at least two private RSA keys for your identity.
+# I assume that your keys are stored in:
+#
+#        /home/john/.ssh/john_id_rsa
+#        /home/john/.ssh/peter_id_rsa
+#
+#
+# All your identities are stored within .gitconfig.
+#
+# Add your adentities to your ~/.gitconfig file like in the following listing.
+# Every login has to be exactly the same as its key given in [identity "..."].
+# If you define identity [identity "foo"] its login has to be "foo".
+#
+#    # extract from ~/.gitconfig
+#    [identity "john"]
+#        name = John Doe
+#        email = john@example.net
+#        key = /home/john/.ssh/john_id_rsa
+#        login = john
+#
+#    [identity "peter"]
+#        name = Peter Nobody
+#        email = peter@some.other.host.example.com
+#        key = /home/john/.ssh/peter_id_rsa
+#        login = peter
+#
+#
+# If you have .ssh/config file with some entries, like in:
+#
+#    # extract from ~/config
+#    Host some-label
+#        HostName some-host.com
+#        User some-user
+#        IdentityFile ~/.ssh/some-user_id_rsa
+#
+#    Host some-other-label
+#        HostName some-other-host.com
+#        User some-other-user
+#        IdentityFile ~/.ssh/some-other-user_id_rsa
+#
+# You will have to uncomment swapid entry.
+#
+#
+# Use:
+#
+#    ssh -T user@host
+#    ssh -T some-label
+#    ssh -T some-other-label
+#
+# to test your identity for a host.
+#
+# (C) 2013 gajdaw
+#
+
+if [ "$#" -gt 1 ]; then
+    echo "***** ERROR: Too many arguments!"
+    exit
+fi;
+
+if [ "$#" -eq 1 ]; then
+    MYID=$1
+else
+    # set default identity if possible
+    MYID=`git config --global user.login`
+
+    if [ "$MYID" == "" ]; then
+        echo "***** ERROR: Global user.login not set!"
+        echo "***** ERROR: git swapid called without parameters needs default identity!"
+        exit
+    fi;
+fi;
+
+if [ "$MYID" == "" ]; then
+    echo "***** ERROR: The identity cannot be a null string!"
+    exit
+fi;
+
+MYID_NAME=`git config --global identity.$MYID.name`
+MYID_EMAIL=`git config --global identity.$MYID.email`
+MYID_KEY=`git config --global identity.$MYID.key`
+MYID_LOGIN=`git config --global identity.$MYID.login`
+
+echo "ID:name     = $MYID_NAME"
+echo "ID:email    = $MYID_EMAIL"
+echo "ID:key      = $MYID_KEY"
+echo "ID:login    = $MYID_LOGIN"
+echo "  "
+
+# We expect all four not null global git config settings for this id
+if [ "$MYID_NAME" == "" ]; then
+    echo "***** ERROR: Problem with git global configuration: identity.$MYID.name"
+    exit;
+fi
+if [ "$MYID_EMAIL" == "" ]; then
+    echo "***** ERROR: Problem with git global configuration: identity.$MYID.email"
+    exit;
+fi
+if [ "$MYID_KEY" == "" ]; then
+    echo "***** ERROR: Problem with git global configuration: identity.$MYID.key"
+    exit;
+fi
+if [ "$MYID_LOGIN" == "" ]; then
+    echo "***** ERROR: Problem with git global configuration: identity.$MYID.login"
+    exit;
+fi
+
+
+# without parameters only print current settings
+if [ "$#" -eq 0 ]; then
+    exit
+fi;
+
+# Everything is fine. Swap the identity
+
+# swap global git config
+git config --global user.name "$MYID_NAME"
+git config --global user.email $MYID_EMAIL
+git config --global user.login $MYID_LOGIN
+
+
+# swap private key in .ssh/config
+SSH_CONFIG_LINE="IdentityFile                         $MYID_KEY"
+ESCAPED="$(echo "$SSH_CONFIG_LINE" | sed -e 's/[\/&]/\\&/g')"
+
+# does the .ssh/config exists?
+if [ ! -f ~/.ssh/config ]; then
+    echo "    * Creating ~/.ssh/config"
+    echo "#swapid" > ~/.ssh/config
+    echo "#    Notice" >> ~/.ssh/config
+    echo "#        Global settings at the beginning of .ssh/config file" >> ~/.ssh/config
+    echo "#        override all Host entries!" >> ~/.ssh/config
+    echo "#" >> ~/.ssh/config
+    echo "$SSH_CONFIG_LINE" >> ~/.ssh/config
+else
+
+    # Does ~/.ssh/config contain our IdentityFile?
+    WASIUSED=`grep -E "^IdentityFile                         [^ ;]*$" ~/.ssh/config | wc -l`
+    if [ $WASIUSED -eq 0 ]; then
+        # no, there isn't IdentityFile entry matching swapid RE in .ssh/config
+        echo "***** ERROR: Was .ssh/config used by swapid before?"
+        echo "***** ERROR: Check .ssh/config  - look for #IdentityFile"
+
+        # Should we add commented IdentityFile line?
+        WASIUSED_COMMENTED=`grep -E "^#IdentityFile                         [^ ;]*$" ~/.ssh/config | wc -l`
+        if [ $WASIUSED_COMMENTED -eq 0 ]; then
+            echo "#swapid" >> ~/.ssh/config
+            echo "#    Notice" >> ~/.ssh/config
+            echo "#        Global settings at the beginning of .ssh/config file" >> ~/.ssh/config
+            echo "#        override all Host entries!" >> ~/.ssh/config
+            echo "#" >> ~/.ssh/config
+            echo "#$SSH_CONFIG_LINE" >> ~/.ssh/config
+        else
+            # modify commented IdentityFile line with new id
+            sed -i "s/^#IdentityFile                         [^ ;]*$/#$ESCAPED/g" ~/.ssh/config
+        fi;
+    else
+        # yes, there is IdentityFile entry matching RE in .ssh/config
+        echo "    * Modifying ~/.ssh/config"
+        sed -i "s/^IdentityFile                         [^ ;]*$/$ESCAPED/g" ~/.ssh/config
+    fi;
+fi;
