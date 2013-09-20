@@ -1,0 +1,39 @@
+
+ssh -T -v user@host
+
+
+instalacja pcregrep
+
+czy w win idzie? Je¶li tak (cygwin) to jeste¶my w domu:
+
+
+#<git-id>
+    IdentityFile /path/to/private/key
+#</git-id>
+
+
+Generujemy:
+
+Host *
+    #<git-id>
+        IdentityFile /path/to/private/key
+    #</git-id>
+
+
+PCRE  w trybie ungready
+
+
+( *)#<git-id>\r?\n( *)IdentityFile *([^\n\r])\r?\n( *)#</git-id>\r?\n
+
+\1 spacje
+\2 spacje
+\3 sciezka
+\4 spacie
+
+
+\1#<git-id>\n\2IdentityFile \3\n\4#</git-id>\n
+
+
+Uwaga na wiele wystapien <git-id></git-id>. Obslugujemy wszystkie.
+
+
