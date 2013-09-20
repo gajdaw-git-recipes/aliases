@@ -8,8 +8,8 @@
 # You need at least two private RSA keys for your identity.
 # I assume that your keys are stored in:
 #
-#        /home/john/.ssh/john_id_rsa
-#        /home/john/.ssh/peter_id_rsa
+#        /home/john/.ssh/john
+#        /home/john/.ssh/peter
 #
 #
 # All your identities are stored within .gitconfig.
@@ -22,39 +22,38 @@
 #    [identity "john"]
 #        name = John Doe
 #        email = john@example.net
-#        key = /home/john/.ssh/john_id_rsa
+#        key = /home/john/.ssh/john
 #        login = john
 #
 #    [identity "peter"]
 #        name = Peter Nobody
 #        email = peter@some.other.host.example.com
-#        key = /home/john/.ssh/peter_id_rsa
+#        key = /home/john/.ssh/peter
 #        login = peter
 #
 #
-# If you have .ssh/config file with some entries, like in:
+# Swapid entry is appended at the end of .ssh/config.
+# It will be the last effort entry.
+# If you have .ssh/config entries like in:
 #
 #    # extract from ~/config
 #    Host some-label
-#        HostName some-host.com
-#        User some-user
-#        IdentityFile ~/.ssh/some-user_id_rsa
+#        HostName example.com
+#        User john
+#        IdentityFile ~/.ssh/john_id_rsa
 #
-#    Host some-other-label
-#        HostName some-other-host.com
-#        User some-other-user
-#        IdentityFile ~/.ssh/some-other-user_id_rsa
+#    Host lorem
+#        HostName ipsum.com
+#        User sarah
+#        IdentityFile ~/.ssh/sarah_id_rsa
 #
-# You will have to uncomment swapid entry.
+#    Host *
+#        IdentityFile ~/.ssh/another_id_rsa
 #
-#
-# Use:
-#
-#    ssh -T user@host
-#    ssh -T some-label
-#    ssh -T some-other-label
-#
-# to test your identity for a host.
+# Then:
+#    ssh -T some-label            --> john@example.com using john_id_rsa
+#    ssh -T lorem                 --> sarah@ipsum.com using sarah_id_rsa
+#    ssh -T me@ble                --> me@ble using another_id_rsa
 #
 # (C) 2013 gajdaw
 #
@@ -126,43 +125,38 @@ git config --global user.login $MYID_LOGIN
 
 
 # swap private key in .ssh/config
-SSH_CONFIG_LINE="IdentityFile                         $MYID_KEY"
+SSH_CONFIG_LINE="       IdentityFile                         $MYID_KEY"
 ESCAPED="$(echo "$SSH_CONFIG_LINE" | sed -e 's/[\/&]/\\&/g')"
 
 # does the .ssh/config exists?
 if [ ! -f ~/.ssh/config ]; then
     echo "    * Creating ~/.ssh/config"
     echo "#swapid" > ~/.ssh/config
-    echo "#    Notice" >> ~/.ssh/config
-    echo "#        Global settings at the beginning of .ssh/config file" >> ~/.ssh/config
-    echo "#        override all Host entries!" >> ~/.ssh/config
-    echo "#" >> ~/.ssh/config
+    echo "Host *" >> ~/.ssh/config
     echo "$SSH_CONFIG_LINE" >> ~/.ssh/config
 else
 
     # Does ~/.ssh/config contain our IdentityFile?
-    WASIUSED=`grep -E "^IdentityFile                         [^ ;]*$" ~/.ssh/config | wc -l`
+    WASIUSED=`grep -E "^       IdentityFile                         [^ ;]*$" ~/.ssh/config | wc -l`
     if [ $WASIUSED -eq 0 ]; then
         # no, there isn't IdentityFile entry matching swapid RE in .ssh/config
         echo "***** ERROR: Was .ssh/config used by swapid before?"
         echo "***** ERROR: Check .ssh/config  - look for #IdentityFile"
 
-        # Should we add commented IdentityFile line?
-        WASIUSED_COMMENTED=`grep -E "^#IdentityFile                         [^ ;]*$" ~/.ssh/config | wc -l`
+        # Is there a commented IdentityFile line?
+        WASIUSED_COMMENTED=`grep -E "^#       IdentityFile                         [^ ;]*$" ~/.ssh/config | wc -l`
         if [ $WASIUSED_COMMENTED -eq 0 ]; then
+
             echo "#swapid" >> ~/.ssh/config
-            echo "#    Notice" >> ~/.ssh/config
-            echo "#        Global settings at the beginning of .ssh/config file" >> ~/.ssh/config
-            echo "#        override all Host entries!" >> ~/.ssh/config
-            echo "#" >> ~/.ssh/config
-            echo "#$SSH_CONFIG_LINE" >> ~/.ssh/config
+            echo "Host *" >> ~/.ssh/config
+            echo "$SSH_CONFIG_LINE" >> ~/.ssh/config
         else
             # modify commented IdentityFile line with new id
-            sed -i "s/^#IdentityFile                         [^ ;]*$/#$ESCAPED/g" ~/.ssh/config
+            sed -i "s/^#       IdentityFile                         [^ ;]*$/#$ESCAPED/g" ~/.ssh/config
         fi;
     else
         # yes, there is IdentityFile entry matching RE in .ssh/config
         echo "    * Modifying ~/.ssh/config"
-        sed -i "s/^IdentityFile                         [^ ;]*$/$ESCAPED/g" ~/.ssh/config
+        sed -i "s/^       IdentityFile                         [^ ;]*$/$ESCAPED/g" ~/.ssh/config
     fi;
 fi;
