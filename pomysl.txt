@@ -1,5 +1,10 @@
 
 ssh -T -v user@host
+Dok³adne info: adres ip, port
+
+Brak usera?
+
+
 
 
 instalacja pcregrep
@@ -16,7 +21,7 @@ Generujemy:
 
 Host *
     #<git-id>
-        IdentityFile /path/to/private/key
+    IdentityFile /path/to/private/key
     #</git-id>
 
 
