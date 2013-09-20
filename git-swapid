@@ -81,35 +81,85 @@ if [ ! $MYID ]; then
     exit
 fi;
 
+USER_NAME=`git config --global user.name`
+USER_EMAIL=`git config --global user.email`
+USER_LOGIN=`git config --global user.login`
+
 MYID_NAME=`git config --global identity.$MYID.name`
 MYID_EMAIL=`git config --global identity.$MYID.email`
 MYID_KEY=`git config --global identity.$MYID.key`
 MYID_LOGIN=`git config --global identity.$MYID.login`
 
-echo "ID:name     = $MYID_NAME"
-echo "ID:email    = $MYID_EMAIL"
-echo "ID:key      = $MYID_KEY"
-echo "ID:login    = $MYID_LOGIN"
+echo "Configuration read from ~/.gitconfig"
+echo "    user.name     = $USER_NAME"
+echo "    user.email    = $USER_EMAIL"
+echo "    user.login    = $USER_LOGIN"
 echo "  "
+echo "    identity.$MYID.name     = $MYID_NAME"
+echo "    identity.$MYID.email    = $MYID_EMAIL"
+echo "    identity.$MYID.key      = $MYID_KEY"
+echo "    identity.$MYID.login    = $MYID_LOGIN"
+echo "  "
+echo "Configuration read from ~/.ssh/config"
+grep -E "^       IdentityFile                         [^ ;]*$" ~/.ssh/config
+echo "  "
+
+
+#if [ "$MYID_NAME $MYID_EMAIL $MYID_KEY $MYID_LOGIN" == "   " ]; then
+#    echo "    * Initialazing $MYID identity"
+#    git config --global identity.$MYID.name "John Doe"
+#    git config --global identity.$MYID.email john@example.net
+#    git config --global identity.$MYID.key ~/.ssh/john_id_rsa
+#    git config --global identity.$MYID.login $MYID
+
+#    MYID_NAME=`git config --global identity.$MYID.name`
+#    MYID_EMAIL=`git config --global identity.$MYID.email`
+#    MYID_KEY=`git config --global identity.$MYID.key`
+#    MYID_LOGIN=`git config --global identity.$MYID.login`
+#fi;
+
 
 # We expect all four not null global git config settings for this id
 if [ ! "$MYID_NAME" ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.name"
+    echo " "
+    echo "You can set it with:"
+    echo "    \$ git config --global identity.$MYID.name \"John Doe\""
     exit;
 fi
 if [ ! $MYID_EMAIL ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.email"
+    echo " "
+    echo "You can set it with:"
+    echo "    \$ git config --global identity.$MYID.email john@example.net"
     exit;
 fi
 if [ ! $MYID_KEY ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.key"
+    echo " "
+    echo "You can set it with:"
+    echo "    \$ git config --global identity.$MYID.key ~/.ssh/john_id_rsa"
     exit;
 fi
 if [ ! $MYID_LOGIN ]; then
     echo "***** ERROR: Problem with git global configuration: identity.$MYID.login"
+    echo " "
+    echo "You can set it with:"
+    echo "    \$ git config --global identity.$MYID.login $MYID"
     exit;
 fi
 
+if [ ! -f $MYID_KEY ]; then
+    echo "***** ERROR: The private key does not exist!"
+    echo "***** ERROR: Filename: $MYID_KEY"
+    echo ""
+fi
+
+if [ ! $MYID_LOGIN == $MYID ]; then
+    git config --global identity.$MYID.login $MYID
+    MYID_LOGIN=$MYID
+    echo "    * Resetting LOGIN in ~/.gitconfig for $MYID"
+fi
 
 # without parameters only print current settings
 if [ "$#" -eq 0 ]; then
