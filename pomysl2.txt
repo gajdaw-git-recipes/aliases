@@ -1,0 +1,12 @@
+
+Znajdujemy liniê zawieraj±c± #<git-id>
+TAG_OPEN=`sed -n '/#<git-id>/=' ~/.ssh/config`
+TAG_CLOSE_=`sed -n '/#<git-id>/=' ~/.ssh/config`
+
+TAG_OPEN === TAG_CLOSE - 2
+
+LINE_TO_EDIT = TAG_OPEN + 1
+
+Edycja linii numer LINE_TO_EDIT
+pod warunkiem, ¿e pasuje do wzorca [\s]*IdentityFile\s+.*
+
