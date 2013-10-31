@@ -1,18 +1,19 @@
 #!/bin/sh
 
-set -e
+OBJECTS=`git list-all-objects`
 
-cd "$(git rev-parse --git-dir)"
+for sha1 in $OBJECTS; do
+    TYP=`git cat-file -t $sha1`
+    if [ "$1" ]; then
+        if [ $TYP == "$1" ]; then
+            echo "===================================================="
+            echo $TYP $sha1;
+            echo
+            git cat-file -p $sha1;
+        fi
+    else
+        echo $TYP $sha1;
+    fi
 
-# Find all the objects that are in packs:
 
-find objects/pack -name 'pack-*.idx' | while read p ; do
-    git show-index < $p | cut -f 2 -d ' '
-done
-
-# And now find all loose objects:
-
-find objects/ \
-    | egrep '[0-9a-f]{38}' \
-    | perl -pe 's:^.*([0-9a-f][0-9a-f])/([0-9a-f]{38}):\1\2:' \
-;
+done;
