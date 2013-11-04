@@ -1,0 +1,5 @@
+#!/bin/sh
+
+git log --pretty=format:%cd --date=short | uniq
+
+

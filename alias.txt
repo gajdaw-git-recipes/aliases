@@ -81,7 +81,7 @@
 #    git simple-commit a
 #    git simple-commit a b c
 #
-    simple-commit = "!simpleCommit() { for name in \"$@\"; do git create-file $name; git snapshot $name; done; }; simpleCommit"
+    simple-commit = "!simpleCommit() { for name in \"$@\"; do git create-file \"$name\"; git snapshot $name; done; }; simpleCommit"
 
 
 # Alias: multiple-commit

@@ -1,0 +1,103 @@
+
+ssh -T -v user@host
+Dok³adne info: adres ip, port
+
+Brak usera?
+
+
+
+
+instalacja pcregrep
+
+czy w win idzie? Je¶li tak (cygwin) to jeste¶my w domu:
+
+
+#<git-id>
+    IdentityFile /path/to/private/key
+#</git-id>
+
+
+Generujemy:
+
+Host *
+    #<git-id>
+    IdentityFile /path/to/private/key
+    #</git-id>
+
+
+PCRE  w trybie ungready
+
+
+( *)#<git-id>\r?\n( *)IdentityFile *([^\n\r])\r?\n( *)#</git-id>\r?\n
+
+\1 spacje
+\2 spacje
+\3 sciezka
+\4 spacie
+
+
+\1#<git-id>\n\2IdentityFile \3\n\4#</git-id>\n
+
+
+Uwaga na wiele wystapien <git-id></git-id>. Obslugujemy wszystkie.
+
+
+Je¶li nie ma naszego znacznika do dodajemy go na pocz±tku. Jako pierwszy wpis w pliku.
+W ten sposbó podany klucz bêdzie zawsze sprawdzany jako pierwszy. Uda siê i ustali ostatecznie to¿samo¶æ osoby.
+
+
+SSH: mo¿na wiele pokrywaj±cych siê wpisów
+
+        Host *
+          IdentityFile a
+        Host local*
+          IdentityFile b
+
+        Host *host
+          IdentityFile c
+
+bêd± zastosowane wszystkie.
+
+Mog± byæ wielokrotne klucze: w ka¿dym wpisie inny.
+Zastosowany zostanie pierwszy pasuj±cy.
+
+Czy lepiej by klucz pasuj±cy * by³ stosowany jako pierwszy? Je¶li pasuje - tak. Je¶li siê pomy
+Czy wa¿ne jest to, ¿e próbowane s± inne klucze oprócz pasuj±cego? Czy to czym¶ grozi?
+Je¶li nie to wpis * mo¿e byæ w dowolnym miejscu.
+
+
+================================================================
+git id - co to rozwi±zuje
+
+dotyczy przypadku, gdy mamy kikla to¿samo¶ci na jednym ho¶cie
+
+john@localhost
+sarah@localhost
+
+Chcemy u¿ywaæ git clone john@localhost:some/repo.git
+Nie chcemy u¿ywaæ: git clone john-on-localhost:some/repo.git
+
+Chcemy zmieniaæ zarówno klucz ssh jak i dane komitera.
+
+
+
+Co bêdzie gdy zrobimy:
+
+ssh -T -v peter@localhost
+ssh -T -v sarah@localhost
+
+trzeba: w localhost nie dawaæ klucza.
+Ogólnie: wpisy obs³ugiwane przez git id nie powinny mieæ IdentityFile
+
+
+
+================================================================
+
+#obslugiwane przez git id - bez IdentityFile
+Host local*
+  Port 1234
+
+czyli jednak: <git-id> ma wyst±piæ jeden raz: dla *
+
+wtedy: <git-id> na koñcu
+
